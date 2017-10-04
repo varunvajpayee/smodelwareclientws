@@ -21,6 +21,7 @@ Ext.define('smartcfaclienttouch.controller.authentication.RegisterFormViewContro
         var successCallback = function(resp, ops)
         {
             Ext.Msg.alert('Registration Done','Registration successful', Ext.emptyFn);
+            localStorage.setItem('currentUser', resp.responseText);
             //window.location.replace(location.protocol+'//'+location.hostname);
             formWindow.destroy();
             console.log('Registration successful');

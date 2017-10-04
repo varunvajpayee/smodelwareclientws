@@ -62,13 +62,19 @@ Ext.define('smartcfaclienttouch.view.User', {
                         pack: 'center'
                     },
                     items: [
-                       /* {
+                        {
                             xtype: 'button',
                             text: 'Logout',
                             handler: function(button, e)
                             {
+                                localStorage.removeItem('currentUser');
+                                document.cookie =  'login=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                                console.log('Logout Done');
+                                Ext.Viewport.setActiveItem('LoginPanel');
+                                var formWindow = button.up('#userInfo');
+                                formWindow.hide();
                                 // Success
-                                var successCallback = function(resp, ops)
+                                /*var successCallback = function(resp, ops)
                                 {
                                     console.log('Logout Done', resp);
                                     Ext.Viewport.setActiveItem('LoginPanel');
@@ -91,9 +97,9 @@ Ext.define('smartcfaclienttouch.view.User', {
                                     params: null,
                                     success: successCallback,
                                     failure: failureCallback
-                                });
+                                });*/
                             },
-                        },*/
+                        },
                         {
                             xtype: 'button',
                             text: 'Cancel',

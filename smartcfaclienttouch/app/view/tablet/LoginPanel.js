@@ -2,9 +2,10 @@
  * Created by varun on 9/15/2016.
  */
 Ext.define('smartcfaclienttouch.view.tablet.LoginPanel', {
-    extend: 'Ext.Container',
+    extend: 'Ext.Panel',
     xtype: 'LoginPanel',
     itemId: 'LoginPanel',
+    baseCls: 'auth-locked',
     requires: [
         'Ext.Panel',
         'Ext.Label',
@@ -30,7 +31,7 @@ Ext.define('smartcfaclienttouch.view.tablet.LoginPanel', {
             width: 400,
             centered: true,
             padding: 10,
-            border:true,
+            border:false,
             items: [
                 {
                     xtype: 'formpanel',

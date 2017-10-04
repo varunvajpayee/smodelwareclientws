@@ -3,6 +3,7 @@
  */
 Ext.define('smartcfaclienttouch.view.phone.LoginPanel', {
     extend: 'Ext.Container',
+    baseCls: 'auth-locked',
     requires: [
         'smartcfaclienttouch.view.common.LoginButtonPanel',
         'Ext.Panel',
@@ -26,10 +27,10 @@ Ext.define('smartcfaclienttouch.view.phone.LoginPanel', {
         {
             xtype: 'panel',
             style: 'background-color: #FFFFFF;',
-            width: 400,
+            width: 300,
             centered: true,
             padding: 10,
-            border:true,
+            border:false,
             items: [
                 {
                     xtype: 'formpanel',
@@ -70,7 +71,7 @@ Ext.define('smartcfaclienttouch.view.phone.LoginPanel', {
                                 {
                                     xtype: 'button',
                                     cls: 'x-button-focus x-button-pressed',
-                                    width: 150,
+                                    width: 200,
                                     text: 'Sign In',
                                     listeners: {
                                         tap: 'onSignIn'

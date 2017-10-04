@@ -2,8 +2,17 @@ Ext.define('smartcfaclienttouch.view.LoginPanelViewController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.loginpanel',
 
-    init: function(view)
+    setUpViewport: function () {
+        console.log('smartcfaclienttouch.userlogedIn::YES');
+        if (Ext.os.is.Phone) {
+            Ext.Viewport.setActiveItem('mainviewPhone');
+        }
+        else {
+            Ext.Viewport.setActiveItem('mainview');
+        }
+    }, init: function(view)
     {
+        //debugger;
         console.log('Table/Desktop::'+(Ext.os.is.Tablet || Ext.os.is.Desktop));
         console.log('Phone::'+Ext.os.is.Phone);
 
@@ -11,50 +20,41 @@ Ext.define('smartcfaclienttouch.view.LoginPanelViewController', {
             len = parts.length,
             item, i, ret;
 
+        var loginParam =  this.findGetParameter('login');
+        var userFoundInLocalStorage  = localStorage.getItem('currentUser');
+        var userFoundInCookies = false;
         for (i = 0; i < len; ++i) {
             item = parts[i].split('=');
             console.log('cookie:'+item);
 
-           var loginParam =  this.findGetParameter('login');
-
             if (item[0] === "login"){
-                if(loginParam){
-                    /*if(loginParam=='USER_LOGGED_OUT'){
+                userFoundInCookies = true;
+            }
+        }
 
-                        window.top.location.href = "http://brightanalyst.com/login";
-                    }*/
-
-                    item[1] = loginParam;
-                }
-
-
-               console.log('smartcfaclienttouch.userlogedIn::YES');
-               if(Ext.os.is.Phone)
-               {
-                   Ext.Viewport.setActiveItem('mainviewPhone');
-               }
-               else
-               {
-                   Ext.Viewport.setActiveItem('mainview');
-               }
+            if(userFoundInLocalStorage){
+                console.log('User found in local storage');
+                //document.cookie =  'login='+userFoundInLocalStorage+'; expires=Thu, 01 Jan 2070 00:00:00 UTC;';
+                this.setCookieAndLoadView();
+                //this.setUpViewport();
             }
             else if(loginParam){
-                document.cookie =  document.cookie+'login='+loginParam+'; expires=Thu, 01 Jan 2070 00:00:00 UTC; path=/;';
-                console.log('smartcfaclienttouch.userlogedIn::YES');
-                if(Ext.os.is.Phone)
-                {
-                    Ext.Viewport.setActiveItem('mainviewPhone');
-                }
-                else
-                {
-                    Ext.Viewport.setActiveItem('mainview');
-                }
+                console.log('User found in arguments');
+                localStorage.setItem('currentUser', JSON.stringify(loginParam));
+                //document.cookie =  'login='+loginParam+'; expires=Thu, 01 Jan 2070 00:00:00 UTC;';
+                this.setCookieAndLoadView();
+                //this.setUpViewport();
+            }
+            else if(userFoundInCookies){
+                console.log('User found in cookies');
+                localStorage.setItem('currentUser', item[1]);
+                this.setUpViewport();
             }
             else
             {
                console.log('smartcfaclienttouch.userlogedIn:: NOT');
             }
-        }
+
 
 
     },
@@ -71,9 +71,42 @@ Ext.define('smartcfaclienttouch.view.LoginPanelViewController', {
         });
     return result;
     },
+    setCookieAndLoadView: function()
+    {
+        var me =this;
+       var values = {"userId":localStorage.getItem('currentUser')};
 
+        // Success
+        var successCallback = function(resp, ops)
+        {
+            //window.location.replace(location.protocol+'//'+location.hostname);
+            console.log('Login successful', resp);
+            localStorage.setItem('currentUser', resp.responseText);
+            me.setUpViewport();
+
+        };
+        // Failure
+        var failureCallback = function(resp, ops)
+        {
+            var me =this;
+           // Ext.Msg.alert('User not found','Please register!' , Ext.emptyFn);
+            // Show login failure error
+            console.log('Login Failure', resp);
+
+        };
+
+        Ext.Ajax.request({
+            //url: "http://localhost:8888/saveUser", url: location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/saveUser',
+            url: smartcfaclienttouch.protocolHostPort+'/setCookie',
+            method:'POST',
+            params: localStorage.getItem('currentUser'),
+            success: successCallback,
+            failure: failureCallback
+        });
+    },
     onSignIn: function(button, e, eOpts)
     {
+        var me=this;
         var view = this.getView(),
             formWindow = button.up('formpanel'),
             values = formWindow.getValues();
@@ -84,14 +117,8 @@ Ext.define('smartcfaclienttouch.view.LoginPanelViewController', {
             //window.location.replace(location.protocol+'//'+location.hostname);
             formWindow.destroy();
             console.log('Login successful', resp);
-            if(Ext.os.is.Phone)
-            {
-                Ext.Viewport.setActiveItem('mainviewPhone');
-            }
-            else
-            {
-                Ext.Viewport.setActiveItem('mainview');
-            }
+            localStorage.setItem('currentUser', resp.responseText);
+            me.setUpViewport();
 
         };
         // Failure
@@ -129,12 +156,12 @@ Ext.define('smartcfaclienttouch.view.LoginPanelViewController', {
     onGoogleLogInClick: function(button, e, eOpts) {
         var view = this.getView(),
             form = Ext.ComponentQuery.query('#loginFromPanel')[0],
-            values = form.getValues();
+            values = {"isTermAccepted":'Y'};//form.getValues();
 
         // Success
         var successCallback1 = function(resp, ops)
         {
-            Ext.Msg.alert('Registration done!',' Your GMail address is your username.', Ext.emptyFn);
+           // Ext.Msg.alert('Registration done!',' Your GMail address is your username.', Ext.emptyFn);
             console.log('Login URL:'+resp.responseText);
             window.location.replace(resp.responseText);
 

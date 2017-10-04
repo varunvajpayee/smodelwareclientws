@@ -18,7 +18,7 @@ Ext.define('smartcfaclienttouch.view.common.LoginButtonPanel', {
         {
             xtype: 'button',
             ui: 'decline',
-            width: '50%',
+            width: '200',
             text: 'Forgot Password',
             listeners: {
                 tap: 'onForgotPassword'
@@ -27,19 +27,20 @@ Ext.define('smartcfaclienttouch.view.common.LoginButtonPanel', {
         {
             xtype: 'button',
             ui: 'confirm',
-            width: '50%',
+            width: '200',
             text: 'Create Account'
             , listeners: {
              tap: 'onCreateAccount'
              }
         },{
             xtype: 'button',
+            width: '200',
             //scale: 'large',
             ui: 'googleplus',
             iconAlign: 'right',
             iconCls: 'x-fa fa-google',
-            text: 'Login with Google',
-            listeners: {
+            text: 'Google Login',
+           listeners: {
                 tap: 'onGoogleLogInClick'
             }
         }
