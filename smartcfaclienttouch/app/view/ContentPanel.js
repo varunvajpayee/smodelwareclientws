@@ -5,7 +5,6 @@ Ext.define('smartcfaclienttouch.view.ContentPanel', {
     extend: 'Ext.tab.Panel',
     xtype: 'contentpanel',
 
-
     requires: [
         'smartcfaclienttouch.view.QuestionList','smartcfaclienttouch.view.NoteList','Ext.TitleBar', 'Ext.dataview.List'
         ],

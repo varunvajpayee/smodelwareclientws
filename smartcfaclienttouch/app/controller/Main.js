@@ -24,6 +24,7 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             main: 'mainview',
             centerPanel:'#launchscreen',
             toolbar: '#mainNavigationBar',
+            bottombar:'#bottomToolbar',
             sourceButton: 'button[action=viewSource]',
             aboutButton: 'button[title=Giving Back]',
             userButton: 'button[text=User]',
@@ -59,6 +60,9 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             ,
             qbankButton:{
                 tap: 'showQuestion'
+            },
+            sourceButton:{
+                tap: 'downloadContent'
             }
         },
 
@@ -111,6 +115,44 @@ Ext.define('smartcfaclienttouch.controller.Main', {
         })
         this.overlay.show();
 
+    },
+
+    downloadContent:function () {
+       // var lastNode = this.getNav().getLastNode();
+        var param;
+        if(location.hash){
+            param = location.hash.split('/')[1];
+
+            var viewName = this.getNav().getLastNode().data.view;
+            if(!viewName){
+              viewName = this.getBottombar().getActiveItem().title=='Notes'?'Npanel':'QPanel';
+            }
+            var id = this.getNav().getLastNode().data.id=='root'?param:this.getNav().getLastNode().data.id;
+            var kind = this.getNav().getLastNode().data.kind?this.getNav().getLastNode().data.kind:'BOOK';
+
+            Ext.Ajax.request({
+                    url: smartcfaclienttouch.protocolHostPort+'/downloadContent/'+id+'/'+viewName+'/'+kind,
+                    method:'GET',
+                    success : function(response) {
+                        console.log(response.responseText);
+                        var win = window.open('', '_blank');
+                        win.location = response.responseText;
+                        win.focus();
+
+                    },
+                    failure : function(response) {
+                        var text = response.responseText;
+                         Ext.Msg.alert('Error', text, Ext.emptyFn);
+                    }
+                });
+
+
+        }
+        else {
+            Ext.Msg.alert('Select', 'Please select one of the items first.', Ext.emptyFn);
+        }
+
+        console.log(param);
     },
 
     showNote: function ()
@@ -255,19 +297,25 @@ Ext.define('smartcfaclienttouch.controller.Main', {
         if(view=='Npanel')
         {
             console.log('onMyPanelActivate:Loading Notes');
+
+            Ext.getCmp('innerPanel').setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none" src="'+item.get('url')+'"></iframe>');
+
+            // Ext.getCmp('innerPanel').setLoading(true,Ext.getCmp('innerPanel').body);
             // var locationBaseUrl = location.href.substr(location.href.lastIndexOf("/") + 1,location.href.length);
-            Ext.Ajax.request({
+            /*Ext.Ajax.request({
                 //local path of your html file
                 //url: 'resources/html/'+locationBaseUrl+'.htm',
                 url: smartcfaclienttouch.protocolHostPort+'/getNotesForId/'+item.get('kind')+'/'+item.id+'/'+item.get('ancestorId'),
                 method:'GET',
                 success : function(response) {
-                    Ext.getCmp('innerPanel').setHtml(response.responseText);
+             //       Ext.getCmp('innerPanel').setLoading(false,Ext.getCmp('innerPanel').body);
+                    Ext.getCmp('innerPanel').setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none" src="https://docs.google.com/document/d/e/2PACX-1vQVyfFy3zns8ZNmk4oUKBWpvpGg7RWjQlInPhx9j7sxcavbKw7Nb-GkIj6JJLLWQtl-soAcfMnaHoYW/pub#id.2hx8676216a1"></iframe>');
+                    //Ext.getCmp('innerPanel').setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none" src="https://docs.google.com/forms/d/e/1FAIpQLSd90isah_RqWvlei8JyfLOumTCCboaqzSFg947IWZPXjJv0dQ/viewform?usp=sf_link"></iframe>');
                 },
                 failure : function(response) {
                     var text = response.responseText;
                 }
-            });
+            });*/
         }
         else if(view=='QPanel')
         {

@@ -50,9 +50,9 @@ Ext.define('smartcfaclienttouch.view.tablet.Main', {
                             action: 'viewSource',
                              text: 'Download',
                             iconCls: 'x-fa fa-download',
-                            handler: function() {
+                           /* handler: function() {
                                 Ext.Msg.alert('Members Only', 'PDF Notes and Questions are emailed to paid members only.', Ext.emptyFn);
-                            }
+                            }*/
                         }
                     ]
             },
