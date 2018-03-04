@@ -298,7 +298,7 @@ Ext.define('smartcfaclienttouch.controller.Main', {
         {
             console.log('onMyPanelActivate:Loading Notes');
 
-            Ext.getCmp('innerPanel').setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none" src="'+item.get('url')+'"></iframe>');
+            Ext.getCmp('innerPanel').setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none; pointer-events: none;" src="'+item.get('url')+'"></iframe>');
 
             // Ext.getCmp('innerPanel').setLoading(true,Ext.getCmp('innerPanel').body);
             // var locationBaseUrl = location.href.substr(location.href.lastIndexOf("/") + 1,location.href.length);
