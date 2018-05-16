@@ -50,7 +50,6 @@ Ext.define('smartcfaclienttouch.view.Setting', {
                                 {text: 'Main Topics', value: "LOS"}
                             ]
                         },
-
                         {
                             xtype      : 'spinnerfield',
                             name       : 'questionPerPage',
@@ -60,6 +59,17 @@ Ext.define('smartcfaclienttouch.view.Setting', {
                             maxValue   : 10,
                             stepValue  : 1,
                             cycle      : true
+                        },
+                        {
+                            xtype: 'selectfield',
+                            name : 'showCourses',
+                            label: 'Show Courses',
+                            labelWidth: '60%',
+                            options: [
+                                {text: 'Please select', value: null},
+                                {text: 'All Courses', value: "ALL"},
+                                {text: 'Enrolled Courses', value: "ENROLLED"}
+                            ]
                         }
 
                     ]
@@ -86,6 +96,7 @@ Ext.define('smartcfaclienttouch.view.Setting', {
                                     console.log('settingInfo Done', resp);
                                     //myMask.hide();
                                     var contentTree =Ext.ComponentQuery.query('#mainNestedList')[0];
+                                    contentTree.getStore().removeAll();
                                     contentTree.getStore().load();
                                     Ext.getCmp('bottomToolbar').setActiveItem(0);
                                     formWindow.hide();

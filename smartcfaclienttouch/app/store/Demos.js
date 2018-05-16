@@ -11,7 +11,16 @@ Ext.define('smartcfaclienttouch.store.Demos', {
         proxy: {
             type: 'jsonp',
             //url:  url: location.protocol+'//'+location.hostname+'/getCatalogTree',
-            url: location.protocol+'//'+location.hostname+'/getCatalogTree',
+            setCustomUrl: function (contentType) {
+
+                if(contentType){
+                    this.url= smartcfaclienttouch.protocolHostPort+'/getCatalogTree?paramName='+contentType;
+                }
+                else {
+                    this.url= smartcfaclienttouch.protocolHostPort+'/getCatalogTree';
+                }
+
+            },
             callbackName: 'myCallback'
             /*,success: function(data) {
              callback();

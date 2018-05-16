@@ -3217,7 +3217,9 @@ Ext.define('smartcfaclienttouch.store.Demos1', {
         },
         proxy: {
             type: 'jsonp',
-            url: smartcfaclienttouch.protocolHostPort+'/getCatalogTree',
+            setCustomUrl: function () {
+                this.url= smartcfaclienttouch.protocolHostPort+'/getCatalogTree';
+            },
             callbackName: 'myCallback'
             /*,success: function(data) {
              callback();

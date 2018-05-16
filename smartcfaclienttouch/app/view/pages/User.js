@@ -45,13 +45,16 @@ Ext.define('smartcfaclienttouch.view.User', {
                             name: 'email',
                             labelWidth: '50%',
                             readOnly: true
-                        },
-                        {
-                            xtype: 'textfield',
-                            label: 'Course',
-                            value: 'CFA LEVEL 3',
+                        },{
+                            xtype: 'selectfield',
+                            label: 'Enrolled Course',
                             labelWidth: '50%',
-                            readOnly: true
+                            name: 'course',
+                            options: [
+                                {text: 'Course to enroll', value: null},
+                                {text: 'CFA LEVEL 1', value: "CFA_LEVEL_1"},
+                                {text: 'CFA LEVEL 3', value: "CFA_LEVEL_3"},
+                            ]
                         }
                     ]
                 },
@@ -98,6 +101,43 @@ Ext.define('smartcfaclienttouch.view.User', {
                                     success: successCallback,
                                     failure: failureCallback
                                 });*/
+                            },
+                        },
+                        {
+                            xtype: 'button',
+                            text: 'Save Course',
+                            handler: function(button, e)
+                            {
+                                var formWindow = button.up('#userInfo');
+                                var values = formWindow.getValues()
+                                /*var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+                                myMask.show();
+*/
+                                var successCallback = function(resp, ops)
+                                {
+                                    console.log('settingInfo Done', resp);
+                                    //myMask.hide();
+                                    var contentTree =Ext.ComponentQuery.query('#mainNestedList')[0];
+                                    contentTree.getStore().removeAll();
+                                    contentTree.getStore().load();
+                                    Ext.getCmp('bottomToolbar').setActiveItem(0);
+                                    formWindow.hide();
+                                };
+
+                                var failureCallback = function(resp, ops)
+                                {
+                                    // Show login failure error
+                                    console.log('settingInfo Failure', resp);
+                                    //  myMask.hide();
+
+                                };
+
+                                Ext.Ajax.request({
+                                    url: smartcfaclienttouch.protocolHostPort+'/saveCourseEnrollment?course='+values.course,
+                                    method:'GET',
+                                    success: successCallback,
+                                    failure: failureCallback
+                                });
                             },
                         },
                         {

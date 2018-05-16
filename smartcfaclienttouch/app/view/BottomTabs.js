@@ -37,6 +37,12 @@ Ext.define('smartcfaclienttouch.view.BottomTabs', {
                 iconCls: 'x-fa fa-university'
             },
             {
+                title: 'Video',
+                id:'video',
+                cls: 'card',
+                iconCls: 'x-fa fa-camera'
+            },
+            {
                 title: 'Settings',
                 cls: 'card',
                 iconCls: 'x-fa fa-gear'

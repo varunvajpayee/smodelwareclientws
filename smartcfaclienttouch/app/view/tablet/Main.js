@@ -25,7 +25,7 @@ Ext.define('smartcfaclienttouch.view.tablet.Main', {
                 id: 'launchscreen',
                 cls : 'card',
                 scrollable: true,
-                html: '<iframe width="100%" style="position: absolute; height: 100%; border: none" src="https://storage.googleapis.com/testscoreservice.appspot.com/resources/html/MainScreen.htm"></iframe>'
+                html: '<iframe width="100%" style="position: absolute; height: 100%; border: none" src="https://storage.googleapis.com/testscoreservice.appspot.com/resources/html/MainScreen1.htm"></iframe>'
             },
             {
                 id: 'mainNestedList',

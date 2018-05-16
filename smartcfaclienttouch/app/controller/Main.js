@@ -31,6 +31,7 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             settingButton: 'button[text=Settings]',
             notesButton: 'button[text=Notes]',
             qbankButton: 'button[text=Q-Bank]',
+            vButton: 'button[text=Video]',
             qlist: ' #QuestionList',
          //   themeToggleButton: 'button[action=toggleTheme]',
 
@@ -63,6 +64,9 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             },
             sourceButton:{
                 tap: 'downloadContent'
+            },
+            vButton:{
+                tap: 'showVideo'
             }
         },
 
@@ -157,9 +161,11 @@ Ext.define('smartcfaclienttouch.controller.Main', {
 
     showNote: function ()
     {
+        this.getNav().getStore().removeAll();
+        this.getNav().getStore().proxy.setCustomUrl('NOTE');
         this.getNav().getStore().load({ params: { paramName: 'NOTE' } });
         if(this.getCenterPanel()) {
-            this.getCenterPanel().setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none" src="https://storage.googleapis.com/testscoreservice.appspot.com/resources/html/MainScreen.htm"></iframe>');
+            this.getCenterPanel().setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none" src="https://storage.googleapis.com/testscoreservice.appspot.com/resources/html/MainScreen1.htm"></iframe>');
         }
     },
 
@@ -169,12 +175,23 @@ Ext.define('smartcfaclienttouch.controller.Main', {
         {
             Ext.getCmp('innerPanel').setHtml('');
         }
-       this.getNav().getStore().load({ params: { paramName: 'QUESTION' } })
+       this.getNav().getStore().removeAll();
+       this.getNav().getStore().proxy.setCustomUrl('QUESTION');
+       this.getNav().getStore().load({ params: { paramName: 'QUESTION' } });
         if(this.getCenterPanel()) {
-            this.getCenterPanel().setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none" src="https://storage.googleapis.com/testscoreservice.appspot.com/resources/html/MainScreen.htm"></iframe>');
+            this.getCenterPanel().setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none" src="https://storage.googleapis.com/testscoreservice.appspot.com/resources/html/MainScreen1.htm"></iframe>');
         }
        //this.getCenterPanel().removeAll();
 
+    },
+    showVideo: function ()
+    {
+        this.getNav().getStore().removeAll();
+        this.getNav().getStore().proxy.setCustomUrl('VIDEO');
+        this.getNav().getStore().load({ params: { paramName: 'VIDEO' } });
+        if(this.getCenterPanel()) {
+            this.getCenterPanel().setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none" src="https://storage.googleapis.com/testscoreservice.appspot.com/resources/html/MainScreen1.htm"></iframe>');
+        }
     },
 
     /*
@@ -298,7 +315,28 @@ Ext.define('smartcfaclienttouch.controller.Main', {
         {
             console.log('onMyPanelActivate:Loading Notes');
 
-            Ext.getCmp('innerPanel').setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none; pointer-events: none;" src="'+item.get('url')+'"></iframe>');
+            var frameCode = '<iframe width="100%" style="position: absolute; height: 100%; border: none;"  src="'+item.get('url')+'"></iframe>';
+            if(Ext.isSafari && (Ext.os.deviceType == 'Phone'|| Ext.os.deviceType=="Tablet") ){
+                frameCode = '<div><b>This browser not supported. Please open in IE or Chrome or Mac Safari.</b></div>'+frameCode;
+            }
+
+           /*var frameCode = '<html> ' +
+               '  <head> ' +
+               '    <title>PDF frame scrolling test</title> ' +
+               '    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> ' +
+               '    <style> ' +
+               '      #container1 {  overflow: hidden;   width=100%; height:800px;} ' +
+               '      object {  height: 100%; } ' +
+               '    </style> ' +
+               '  </head> ' +
+               '  <body> ' +
+               '    <div id="container1" > ' +
+               '      <object   width=100%;  id="obj" data="'+item.get('url')+'" ></object>\n' +
+               '    </div> ' +
+               '  </body>' +
+               '</html>';*/
+
+            Ext.getCmp('innerPanel').setHtml(frameCode);
 
             // Ext.getCmp('innerPanel').setLoading(true,Ext.getCmp('innerPanel').body);
             // var locationBaseUrl = location.href.substr(location.href.lastIndexOf("/") + 1,location.href.length);

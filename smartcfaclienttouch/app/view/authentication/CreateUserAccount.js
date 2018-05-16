@@ -57,12 +57,15 @@ Ext.define('smartcfaclienttouch.view.authentication.CreateUserAccount', {
                 name: 'password',
                 userCls: 'text-border'
             },{
-                xtype: 'textfield',
+                xtype: 'selectfield',
                 placeHolder: 'Course',
-                name: 'Course',
-                value: 'CFA LEVEL 3',
-                readOnly: true,
-                userCls: 'text-border'
+                name: 'course',
+                userCls: 'text-border',
+                options: [
+                    {text: 'Course to enroll', value: null},
+                    {text: 'CFA LEVEL 1', value: "CFA_LEVEL_1"},
+                    {text: 'CFA LEVEL 3', value: "CFA_LEVEL_3"},
+                    ]
             }
             ,{
                 layout: 'hbox',

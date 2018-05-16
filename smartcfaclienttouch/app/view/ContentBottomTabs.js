@@ -15,9 +15,10 @@ var reloadQuestions = function (button, newStartIndex, newEndIndex) {
     }
 
     var postBody = {startIndex:newStartIndex,endIndex:newEndIndex,allowAnswers:smartcfaclienttouch.view.ContentBottomTabs.answersEnabled};
+    var ancestorId = Ext.getCmp('hidden_ancestor_id').getValue()?Ext.getCmp('hidden_ancestor_id').getValue():"null";
     Ext.Ajax.request(
         {
-            url: smartcfaclienttouch.protocolHostPort+'/getTest/'+Ext.getCmp('hidden_kind').getValue()+'/'+Ext.getCmp('hidden_id').getValue()+'/'+Ext.getCmp('hidden_ancestor_id').getValue(),
+            url: smartcfaclienttouch.protocolHostPort+'/getTest/'+Ext.getCmp('hidden_kind').getValue()+'/'+Ext.getCmp('hidden_id').getValue()+'/'+ancestorId,
             method:'POST',
             params: {
                 ajax_req: Ext.util.JSON.encode(eles),

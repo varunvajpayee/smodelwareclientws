@@ -17,10 +17,10 @@ Ext.define('smartcfaclienttouch.controller.question.TestResultController', {
         {
             console.log('Test Result Failure', resp);
         };
-
+        var ancestorId = Ext.getCmp('hidden_ancestor_id').getValue()?Ext.getCmp('hidden_ancestor_id').getValue():"null";
         Ext.Ajax.request(
             {
-                url: smartcfaclienttouch.protocolHostPort+'/getTestResult/'+Ext.getCmp('hidden_kind').getValue()+'/'+Ext.getCmp('hidden_id').getValue()+'/'+Ext.getCmp('hidden_ancestor_id').getValue(),
+                url: smartcfaclienttouch.protocolHostPort+'/getTestResult/'+Ext.getCmp('hidden_kind').getValue()+'/'+Ext.getCmp('hidden_id').getValue()+'/'+ancestorId,
                 callbackName: 'myCallback',
                 success: successCallback,
                 failure: failureCallback
