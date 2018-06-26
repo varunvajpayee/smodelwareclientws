@@ -33,6 +33,7 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             qbankButton: 'button[text=Q-Bank]',
             vButton: 'button[text=Video]',
             qlist: ' #QuestionList',
+            vPanel: '#Vpanel'
          //   themeToggleButton: 'button[action=toggleTheme]',
 
         },
@@ -398,6 +399,25 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             var ancestorIdCmp = Ext.getCmp('hidden_ancestor_id');
             ancestorIdCmp.setValue(item.get('ancestorId'));
         }
+        else if(view=='Vpanel'){
+            console.log('VPanel: Video:'+item);
+            var extVideo = Ext.ComponentQuery.query('video')[0];
+            /*var video =   Ext.create('Ext.Video',{
+                xtype: 'video',
+                id:'video1',
+                url: ['https://storage.googleapis.com/stoked-outlook-179704.appspot.com/BA-CFA-Level1/VIDEO/test-mp4.mp4', 'https://storage.googleapis.com/stoked-outlook-179704.appspot.com/BA-CFA-Level1/VIDEO/test-webm.webm'],
+                loop: false,
+                posterUrl: 'https://storage.googleapis.com/stoked-outlook-179704.appspot.com/BA-CFA-Level1/VIDEO/cover.jpg',
+                enableControls:true,
+                autoResume :true
+            });*/
+
+            //this.getVPanel().add(video);
+            //video.play();
+
+
+        }
+
 
     },
 

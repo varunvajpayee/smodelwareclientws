@@ -19,7 +19,7 @@ Ext.define('smartcfaclienttouch.Application', {
 
     init: function()
     {
-        //debugger;
+        debugger;
         var profile = location.href.match(/profile=([\w\-]+)/),
             locale = location.href.match(/locale=([\w\-]+)/),
             m,formValuesFromResponse='';
