@@ -411,9 +411,7 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             if(video.isPainted() && urls){
                 video.stop();
                 video.media.hide();
-                //video.destroy();
-                //video.fireEvent('show');
-                video.setDisabled(true);
+              //  video.setDisabled(true);
                 var n = urls.indexOf(",");
                 if (n == -1) {
                     return;
@@ -430,9 +428,9 @@ Ext.define('smartcfaclienttouch.controller.Main', {
                 nativeVideo.src=url;
                 nativeVideo.load();
                 video.setUrl(url);
-                video.updateUrl(url);
+                //video.updateUrl(url);
                 //video.media.preload(true);
-                video.setDisabled(false);
+               // video.setDisabled(false);
                 video.media.show();
                 video.play();
             }
