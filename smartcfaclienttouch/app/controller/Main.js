@@ -33,6 +33,7 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             qbankButton: 'button[text=Q-Bank]',
             vButton: 'button[text=Video]',
             qlist: ' #QuestionList',
+            vPanel: '#Vpanel'
          //   themeToggleButton: 'button[action=toggleTheme]',
 
         },
@@ -398,6 +399,45 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             var ancestorIdCmp = Ext.getCmp('hidden_ancestor_id');
             ancestorIdCmp.setValue(item.get('ancestorId'));
         }
+        else if(view=='Vpanel'){
+            console.log('VPanel: Video:'+item);
+            var localStore = Ext.util.LocalStorage.get('id');
+            var urls =item.get('url');
+            if(urls){
+                localStore.setItem('urls',urls);
+            }
+
+           var video =Ext.getCmp('myVideo');
+            if(video.isPainted() && urls){
+                video.stop();
+                video.media.hide();
+                //video.destroy();
+                //video.fireEvent('show');
+                video.setDisabled(true);
+                var n = urls.indexOf(",");
+                if (n == -1) {
+                    return;
+                }
+                var url = urls.substring(0, n);
+                urls = urls.substring(n+1);
+                if(urls){
+                    localStore.setItem('urls',urls);
+                }
+                else {
+                    localStore.setItem('urls',null);
+                }
+                var nativeVideo = video.media.dom;
+                nativeVideo.src=url;
+                nativeVideo.load();
+                video.setUrl(url);
+                video.updateUrl(url);
+                //video.media.preload(true);
+                video.setDisabled(false);
+                video.media.show();
+                video.play();
+            }
+        }
+
 
     },
 
