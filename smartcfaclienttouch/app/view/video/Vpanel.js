@@ -52,7 +52,7 @@ Ext.define('smartcfaclienttouch.view.Vpanel', {
                /* var localStore = Ext.util.LocalStorage.get('id');
                 localStore.setItem('url', 'https://storage.cloud.google.com/stoked-outlook-179704.appspot.com/BA-CFA-Level1/VIDEO/test1.mp4');*/
 
-                extVideo.on('ended',function (extObj, time,eOpts) {
+             /*   extVideo.on('ended',function (extObj, time,eOpts) {
                     var localStore = Ext.util.LocalStorage.get('id');
                     var urls = localStore.getItem('urls');
                     var url ='';
@@ -77,7 +77,7 @@ Ext.define('smartcfaclienttouch.view.Vpanel', {
                         extObj.media.dom.load();
                         extObj.media.dom.play();
                     }
-                });
+                });*/
 
                /* if (playPromise !== undefined) {
                     playPromise.then(_ => {

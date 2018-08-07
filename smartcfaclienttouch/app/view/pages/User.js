@@ -52,8 +52,8 @@ Ext.define('smartcfaclienttouch.view.User', {
                             name: 'course',
                             options: [
                                 {text: 'Course to enroll', value: null},
-                                {text: 'CFA LEVEL 1', value: "CFA_LEVEL_1"},
-                                {text: 'CFA LEVEL 3', value: "CFA_LEVEL_3"},
+                                {text: 'CFA LEVEL 1', value: "2018_CFA_LEVEL_1"},
+                                {text: 'CFA LEVEL 3', value: "2018_CFA_LEVEL_3"},
                             ]
                         }
                     ]

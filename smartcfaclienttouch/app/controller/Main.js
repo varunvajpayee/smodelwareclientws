@@ -402,6 +402,7 @@ Ext.define('smartcfaclienttouch.controller.Main', {
         else if(view=='Vpanel'){
             console.log('VPanel: Video:'+item);
             var localStore = Ext.util.LocalStorage.get('id');
+            localStore.clear();
             var urls =item.get('url');
             if(urls){
                 localStore.setItem('urls',urls);
@@ -434,6 +435,33 @@ Ext.define('smartcfaclienttouch.controller.Main', {
                 video.media.show();
                 video.play();
             }
+
+            video.on('ended',function (extObj, time,eOpts) {
+                var localStore = Ext.util.LocalStorage.get('id');
+                var urls = localStore.getItem('urls');
+                var url ='';
+                if(urls){
+                    var n = urls.indexOf(",");
+                    if(n==-1){
+                        url = urls;
+                        localStore.setItem('urls',null);
+                    }
+                    else {
+                        url = urls.substring(0, n);
+                        urls = urls.substring(n + 1);
+                        if (urls) {
+                            localStore.setItem('urls', urls);
+                        }
+                        else {
+                            localStore.setItem('urls', null);
+                        }
+                    }
+
+                    extObj.setUrl(url);
+                    extObj.media.dom.load();
+                    extObj.media.dom.play();
+                }
+            });
         }
 
 
