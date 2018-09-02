@@ -34,7 +34,7 @@ Ext.define('smartcfaclienttouch.view.tablet.Main', {
                 updateTitleText:  true,
                 docked: 'left',
                 width: 200,
-                store: 'Demos'
+                store: 'Demos',
             },
             {
                 id: 'mainNavigationBar',
@@ -54,13 +54,35 @@ Ext.define('smartcfaclienttouch.view.tablet.Main', {
                                 Ext.Msg.alert('Members Only', 'PDF Notes and Questions are emailed to paid members only.', Ext.emptyFn);
                             }*/
                         }
-                    ]
+
+                ]
             },
             {
-                id: 'bottomToolbar',
+                xtype:'container',
                 docked: 'bottom',
-                xtype: 'bottomTabs'
+                padding:0,
+                margin:0,
+                items:[
+                    {
+                        xtype: 'checkboxfield',
+                        name : 'showHideBBar',
+                        label: 'Menu Shown',
+                        labelWidth:'50%',
+                        height:30,
+                        padding:0,
+                        margin:0,
+                        checked: true
+                    },
+                    {
+                        id: 'bottomToolbar',
+                        xtype: 'bottomTabs',
+                        collapsible: true,
+                        collapsed:false,
+
+                    }
+                ]
             }
+
         ]
     }
 });

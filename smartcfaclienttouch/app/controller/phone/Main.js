@@ -51,7 +51,7 @@ Ext.define('smartcfaclienttouch.controller.phone.Main', {
             store = nav.getStore(),
             item = (!id || id == 'root') ? store.getRoot() : store.getNodeById(id);
 
-        if (item) {
+        if (item && !item.isLeaf()) {
             nav.goToNode(item);
             this.getToolbar().setTitle(item.get('text'));
             //this.getSourceButton().setHidden(true);

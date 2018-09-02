@@ -28,24 +28,42 @@ Ext.define('smartcfaclienttouch.view.phone.Main', {
             docked: 'top',
             title: 'Bright Analyst',
 
-            items: {
+            items: [{
                 xtype : 'button',
                 id: 'viewSourceButton',
                 align : 'right',
                 ui    : 'action',
                 action: 'viewSource',
                // text: 'Download',
-                iconCls: 'x-fa fa-download',
-                /*handler: function() {
-                    Ext.Msg.alert('Members Only', 'PDF Notes and Questions are emailed to paid members only.', Ext.emptyFn);
-                }*/
+                iconCls: 'x-fa fa-download'
             }
+            ]
         },
 
-        items: [{
-            id: 'bottomToolbar',
-            xtype: 'bottomTabs',
-            docked: 'bottom'
-        }]
+        items: [
+            {
+                xtype: 'container',
+                docked: 'bottom',
+                padding:0,
+                margin:0,
+                items: [
+                    {
+                        xtype: 'checkboxfield',
+                        name: 'showHideBBar',
+                        label: 'Menu Shown',
+                        labelWidth:'50%',
+                        height:30,
+                        padding:0,
+                        margin:0,
+                        checked: true
+                    },
+                    {
+                        id: 'bottomToolbar',
+                        xtype: 'bottomTabs',
+                   //     docked: 'bottom',
+                        collapsible: true
+                    }
+                ]
+             }]
     }
 });

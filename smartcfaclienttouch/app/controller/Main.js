@@ -13,6 +13,7 @@ Ext.define('smartcfaclienttouch.controller.Main', {
         'Ext.Deferred'
     ],
 
+
     config: {
         /**
          * @private
@@ -33,9 +34,8 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             qbankButton: 'button[text=Q-Bank]',
             vButton: 'button[text=Video]',
             qlist: ' #QuestionList',
-            vPanel: '#Vpanel'
-         //   themeToggleButton: 'button[action=toggleTheme]',
-
+            vPanel: '#Vpanel',
+            cBox: 'checkboxfield[name=showHideBBar]'
         },
 
         control: {
@@ -68,6 +68,9 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             },
             vButton:{
                 tap: 'showVideo'
+            },
+            cBox:{
+                change:'hideShowBottomTabs'
             }
         },
 
@@ -83,6 +86,24 @@ Ext.define('smartcfaclienttouch.controller.Main', {
          */
         //currentDemo: undefined
     },
+    enableDisableControls: function (toggle) {
+        this.getQbankButton().setDisabled(toggle);
+        this.getNotesButton().setDisabled(toggle);
+        this.getVButton().setDisabled(toggle);
+        this.getSettingButton().setDisabled(toggle);
+        this.getUserButton().setDisabled(toggle);
+        this.getAboutButton().setDisabled(toggle);
+        this.getSourceButton().setDisabled(toggle);
+    }, init: function() {
+        console.log('Main Controller Initialised:');
+        var me=this;
+        debugger;
+        this.getStore('Demos').on('load',function(records, operation, success) {
+            console.log('callback called:');
+            me.enableDisableControls(false);
+        });
+
+    },
 
     showAbout: function (){
 
@@ -96,20 +117,22 @@ Ext.define('smartcfaclienttouch.controller.Main', {
         this.showView(myModel);*/
 
 
-            this.overlay = Ext.Viewport.add({
-                xtype: 'aboutUs'
-            })
-            this.overlay.show();
+        this.overlay = Ext.Viewport.add({
+            xtype: 'aboutUs'
+        })
+        this.overlay.show();
 
     },
 
     showUser: function ()
     {
 
-            this.overlay = Ext.Viewport.add({
-                xtype: 'user'
-            })
-            this.overlay.show();
+        this.overlay = Ext.Viewport.add({
+            xtype: 'user'
+        })
+        this.overlay.show();
+        var tabpanel = Ext.Viewport.down('tabpanel');
+        //tabpanel.collapse=true;
 
     },
     showSettings: function ()
@@ -121,35 +144,46 @@ Ext.define('smartcfaclienttouch.controller.Main', {
         this.overlay.show();
 
     },
-
+    hideShowBottomTabs:function (obj) {
+        if (this.getBottombar().getHidden()) {
+            this.getBottombar().show();
+            this.getToolbar().show();
+            obj.setLabel('Menu Shown');
+        }
+        else {
+            this.getBottombar().hide();
+            this.getToolbar().hide();
+            obj.setLabel('Menu Hidden');
+        }
+    },
     downloadContent:function () {
-       // var lastNode = this.getNav().getLastNode();
+        // var lastNode = this.getNav().getLastNode();
         var param;
         if(location.hash){
             param = location.hash.split('/')[1];
 
             var viewName = this.getNav().getLastNode().data.view;
             if(!viewName){
-              viewName = this.getBottombar().getActiveItem().title=='Notes'?'Npanel':'QPanel';
+                viewName = this.getBottombar().getActiveItem().title=='Notes'?'Npanel':'QPanel';
             }
             var id = this.getNav().getLastNode().data.id=='root'?param:this.getNav().getLastNode().data.id;
             var kind = this.getNav().getLastNode().data.kind?this.getNav().getLastNode().data.kind:'BOOK';
 
             Ext.Ajax.request({
-                    url: smartcfaclienttouch.protocolHostPort+'/downloadContent/'+id+'/'+viewName+'/'+kind,
-                    method:'GET',
-                    success : function(response) {
-                        console.log(response.responseText);
-                        var win = window.open('', '_blank');
-                        win.location = response.responseText;
-                        win.focus();
+                url: smartcfaclienttouch.protocolHostPort+'/downloadContent/'+id+'/'+viewName+'/'+kind,
+                method:'GET',
+                success : function(response) {
+                    console.log(response.responseText);
+                    var win = window.open('', '_blank');
+                    win.location = response.responseText;
+                    win.focus();
 
-                    },
-                    failure : function(response) {
-                        var text = response.responseText;
-                         Ext.Msg.alert('Error', text, Ext.emptyFn);
-                    }
-                });
+                },
+                failure : function(response) {
+                    var text = response.responseText;
+                    Ext.Msg.alert('Error', text, Ext.emptyFn);
+                }
+            });
 
 
         }
@@ -159,37 +193,47 @@ Ext.define('smartcfaclienttouch.controller.Main', {
 
         console.log(param);
     },
-
     showNote: function ()
     {
         this.getNav().getStore().removeAll();
         this.getNav().getStore().proxy.setCustomUrl('NOTE');
-        this.getNav().getStore().load({ params: { paramName: 'NOTE' } });
+        this.enableDisableControls(true);
+        this.getNav().getStore().load(
+            {
+                params: { paramName: 'NOTE' }
+            }
+        );
+
         if(this.getCenterPanel()) {
             this.getCenterPanel().setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none" src="https://storage.googleapis.com/testscoreservice.appspot.com/resources/html/MainScreen1.htm"></iframe>');
         }
     },
-
     showQuestion: function ()
     {
         if(  Ext.getCmp('innerPanel'))
         {
             Ext.getCmp('innerPanel').setHtml('');
         }
-       this.getNav().getStore().removeAll();
-       this.getNav().getStore().proxy.setCustomUrl('QUESTION');
-       this.getNav().getStore().load({ params: { paramName: 'QUESTION' } });
+        this.getNav().getStore().removeAll();
+        this.getNav().getStore().proxy.setCustomUrl('QUESTION');
+        this.enableDisableControls(true);
+        this.getNav().getStore().load({ params: { paramName: 'QUESTION' } });
         if(this.getCenterPanel()) {
             this.getCenterPanel().setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none" src="https://storage.googleapis.com/testscoreservice.appspot.com/resources/html/MainScreen1.htm"></iframe>');
         }
-       //this.getCenterPanel().removeAll();
+        //this.getCenterPanel().removeAll();
 
     },
     showVideo: function ()
     {
         this.getNav().getStore().removeAll();
         this.getNav().getStore().proxy.setCustomUrl('VIDEO');
-        this.getNav().getStore().load({ params: { paramName: 'VIDEO' } });
+        this.enableDisableControls(true);
+        this.getNav().getStore().load(
+            {
+                params: { paramName: 'VIDEO' }
+            }
+        );
         if(this.getCenterPanel()) {
             this.getCenterPanel().setHtml('<iframe width="100%" style="position: absolute; height: 100%; border: none" src="https://storage.googleapis.com/testscoreservice.appspot.com/resources/html/MainScreen1.htm"></iframe>');
         }
@@ -289,11 +333,11 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             }
             cache.length = j;
         }
-          /* var cachedView = Ext.ComponentQuery.query('#RevealLeft')[0];
-        if(cachedView)
-        {
-            cachedView.destroy();
-        }*/
+        /* var cachedView = Ext.ComponentQuery.query('#RevealLeft')[0];
+      if(cachedView)
+      {
+          cachedView.destroy();
+      }*/
         view = Ext.create(name);
         view.viewName = name;
         cache.push(view);
@@ -321,21 +365,21 @@ Ext.define('smartcfaclienttouch.controller.Main', {
                 frameCode = '<div><b>This browser not supported. Please open in IE or Chrome or Mac Safari.</b></div>'+frameCode;
             }
 
-           /*var frameCode = '<html> ' +
-               '  <head> ' +
-               '    <title>PDF frame scrolling test</title> ' +
-               '    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> ' +
-               '    <style> ' +
-               '      #container1 {  overflow: hidden;   width=100%; height:800px;} ' +
-               '      object {  height: 100%; } ' +
-               '    </style> ' +
-               '  </head> ' +
-               '  <body> ' +
-               '    <div id="container1" > ' +
-               '      <object   width=100%;  id="obj" data="'+item.get('url')+'" ></object>\n' +
-               '    </div> ' +
-               '  </body>' +
-               '</html>';*/
+            /*var frameCode = '<html> ' +
+                '  <head> ' +
+                '    <title>PDF frame scrolling test</title> ' +
+                '    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> ' +
+                '    <style> ' +
+                '      #container1 {  overflow: hidden;   width=100%; height:800px;} ' +
+                '      object {  height: 100%; } ' +
+                '    </style> ' +
+                '  </head> ' +
+                '  <body> ' +
+                '    <div id="container1" > ' +
+                '      <object   width=100%;  id="obj" data="'+item.get('url')+'" ></object>\n' +
+                '    </div> ' +
+                '  </body>' +
+                '</html>';*/
 
             Ext.getCmp('innerPanel').setHtml(frameCode);
 
@@ -369,22 +413,22 @@ Ext.define('smartcfaclienttouch.controller.Main', {
             var postBody = {startIndex:0,endIndex:qPerPage,allowAnswers:false};
             Ext.Ajax.request(
                 {
-                url: smartcfaclienttouch.protocolHostPort+'/getTest/'+item.get('kind')+'/'+item.id+'/'+item.get('ancestorId'),
-                method:'POST',
+                    url: smartcfaclienttouch.protocolHostPort+'/getTest/'+item.get('kind')+'/'+item.id+'/'+item.get('ancestorId'),
+                    method:'POST',
                     params: {
                         //ajax_req: Ext.util.JSON.encode(postBody),
                         index_req:Ext.util.JSON.encode(postBody)
                     },
-                success : function(response) {
-                    console.log(response);
-                    questStore.setData(JSON.parse(response.responseText).questions);
-                    Ext.getCmp('hidden_max_index').setValue(JSON.parse(response.responseText).totalQuestions);
-                },
-                failure : function(response) {
-                    var text = response.responseText;
-                    // Ext.Msg.alert('Error', text, Ext.emptyFn);
-                }
-            });
+                    success : function(response) {
+                        console.log(response);
+                        questStore.setData(JSON.parse(response.responseText).questions);
+                        Ext.getCmp('hidden_max_index').setValue(JSON.parse(response.responseText).totalQuestions);
+                    },
+                    failure : function(response) {
+                        var text = response.responseText;
+                        // Ext.Msg.alert('Error', text, Ext.emptyFn);
+                    }
+                });
 
 
 
@@ -408,11 +452,11 @@ Ext.define('smartcfaclienttouch.controller.Main', {
                 localStore.setItem('urls',urls);
             }
 
-           var video =Ext.getCmp('myVideo');
+            var video =Ext.getCmp('myVideo');
             if(video.isPainted() && urls){
                 video.stop();
                 video.media.hide();
-              //  video.setDisabled(true);
+                video.setDisabled(true);
                 var n = urls.indexOf(",");
                 if (n == -1) {
                     return;
@@ -429,39 +473,49 @@ Ext.define('smartcfaclienttouch.controller.Main', {
                 nativeVideo.src=url;
                 nativeVideo.load();
                 video.setUrl(url);
-                //video.updateUrl(url);
-                //video.media.preload(true);
-               // video.setDisabled(false);
+                video.updateUrl(url);
+                // video.media.preload(true);
+                video.setDisabled(false);
                 video.media.show();
                 video.play();
             }
 
             video.on('ended',function (extObj, time,eOpts) {
-                var localStore = Ext.util.LocalStorage.get('id');
-                var urls = localStore.getItem('urls');
-                var url ='';
-                if(urls){
-                    var n = urls.indexOf(",");
-                    if(n==-1){
-                        url = urls;
-                        localStore.setItem('urls',null);
-                    }
-                    else {
-                        url = urls.substring(0, n);
-                        urls = urls.substring(n + 1);
-                        if (urls) {
-                            localStore.setItem('urls', urls);
+                    if(!extObj.isPlaying()){
+                        extObj.stop();
+                        extObj.media.hide();
+                        extObj.setDisabled(true);
+                        var localStore = Ext.util.LocalStorage.get('id');
+                        var urls = localStore.getItem('urls');
+                        var url ='';
+                        if(urls && urls!='null') {
+                            var n = urls.indexOf(",");
+                            if (n == -1) {
+                                url = urls;
+                                localStore.setItem('urls', null);
+                            }
+                            else {
+                                url = urls.substring(0, n);
+                                urls = urls.substring(n + 1);
+                                if (urls) {
+                                    localStore.setItem('urls', urls);
+                                }
+                                else {
+                                    localStore.setItem('urls', null);
+                                }
+                            }
+                            extObj.media.dom.pause();
+                            extObj.media.dom.src=url;
+                            extObj.setUrl(url);
+                            extObj.updateUrl(url);
+                            extObj.media.dom.load();
+                            extObj.setDisabled(false);
+                            extObj.media.show();
+                            extObj.play();
                         }
-                        else {
-                            localStore.setItem('urls', null);
-                        }
                     }
-
-                    extObj.setUrl(url);
-                    extObj.media.dom.load();
-                    extObj.media.dom.play();
-                }
-            });
+                }//end of the handler
+            );
         }
 
 
@@ -476,8 +530,8 @@ Ext.define('smartcfaclienttouch.controller.Main', {
     getViewName: function (item) {
         var name = item.get('view') || item.get('text'),
             ns = 'smartcfaclienttouch.view.';
-            return ns + name;
-       },
+        return ns + name;
+    },
 
 
     /**

@@ -3,17 +3,18 @@
  * See also app/view/Tabs.js for an example with the tabBar docked to the top
  */
 Ext.define('smartcfaclienttouch.view.BottomTabs', {
-    extend: 'Ext.tab.Panel',
+    extend: 'Ext.TabPanel',
     xtype: 'bottomTabs',
 
     config: {
         activeTab: 0,
+        collapsible: true,
+        collapsed:true,
         tabBar: {
             layout: {
                 pack : 'center',
                 align: 'center'
             },
-            docked: 'bottom',
             defaults: {
                 iconAlign: 'top'
             },

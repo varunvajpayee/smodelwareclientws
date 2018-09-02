@@ -13,6 +13,9 @@ Ext.define('smartcfaclienttouch.view.Vpanel', {
         listeners: {
             hide: function () {
                 var video = this.down('video');
+                video.stop();
+                video.media.hide();
+                video.media.dom.pause();
                 video.fireEvent('hide');
             },
             show: function (obj) {
@@ -25,7 +28,9 @@ Ext.define('smartcfaclienttouch.view.Vpanel', {
                     && video.readyState > 2;
 
                 if (!isPlaying) {
-                    video.pause();
+                    extVideo.stop();
+                    extVideo.media.hide();
+                    extVideo.setDisabled(true)
                     var localStore = Ext.util.LocalStorage.get('id');
                     var urls = localStore.getItem('urls');
                     if(urls) {
@@ -43,55 +48,16 @@ Ext.define('smartcfaclienttouch.view.Vpanel', {
                             localStore.setItem('urls',null);
                         }
 
+                        extVideo.media.dom.pause();
+                        extVideo.media.dom.src=url;
                         extVideo.setUrl(url);
+                        extVideo.updateUrl(url);
+                        extVideo.media.dom.load();
+                        extVideo.setDisabled(false);
                         extVideo.media.show();
                         extVideo.play();
                     }
-                    //var playPromise = video.play();
                 }
-               /* var localStore = Ext.util.LocalStorage.get('id');
-                localStore.setItem('url', 'https://storage.cloud.google.com/stoked-outlook-179704.appspot.com/BA-CFA-Level1/VIDEO/test1.mp4');*/
-
-             /*   extVideo.on('ended',function (extObj, time,eOpts) {
-                    var localStore = Ext.util.LocalStorage.get('id');
-                    var urls = localStore.getItem('urls');
-                    var url ='';
-                    if(urls){
-                        var n = urls.indexOf(",");
-                        if(n==-1){
-                            url = urls;
-                            localStore.setItem('urls',null);
-                        }
-                        else {
-                            url = urls.substring(0, n);
-                            urls = urls.substring(n + 1);
-                            if (urls) {
-                                localStore.setItem('urls', urls);
-                            }
-                            else {
-                                localStore.setItem('urls', null);
-                            }
-                        }
-
-                        extObj.setUrl(url);
-                        extObj.media.dom.load();
-                        extObj.media.dom.play();
-                    }
-                });*/
-
-               /* if (playPromise !== undefined) {
-                    playPromise.then(_ => {
-                        extVideo.fireEvent('resize');
-                        console.log('play');
-                })
-                .catch(error => {
-                        // Auto-play was prevented
-                        // Show paused UI.
-                        console.log(error);
-                });
-                }*/
-
-
 
             }
         }
@@ -104,7 +70,7 @@ Ext.define('smartcfaclienttouch.view.Vpanel', {
             loop: false,
             posterUrl: 'https://storage.googleapis.com/stoked-outlook-179704.appspot.com/BA-CFA-Level1/VIDEO/cover.jpg',
             enableControls:true,
-            autoResume :true,
+            autoResume :false,
             preload: true
         }
     ]

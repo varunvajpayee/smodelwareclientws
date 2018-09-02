@@ -9,7 +9,7 @@ Ext.define('smartcfaclienttouch.store.Demos', {
         defaultRootProperty: 'items',
         root: {},
         proxy: {
-            type: 'jsonp',
+            type: 'ajax',
             //url:  url: location.protocol+'//'+location.hostname+'/getCatalogTree',
             setCustomUrl: function (contentType) {
 
@@ -21,7 +21,7 @@ Ext.define('smartcfaclienttouch.store.Demos', {
                 }
 
             },
-            callbackName: 'myCallback'
+           // callbackName: 'myCallback'
             /*,success: function(data) {
              callback();
              }*/
