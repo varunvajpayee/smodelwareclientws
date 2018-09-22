@@ -97,7 +97,6 @@ Ext.define('smartcfaclienttouch.controller.Main', {
     }, init: function() {
         console.log('Main Controller Initialised:');
         var me=this;
-        debugger;
         this.getStore('Demos').on('load',function(records, operation, success) {
             console.log('callback called:');
             me.enableDisableControls(false);
